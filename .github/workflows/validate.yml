@@ -1,0 +1,98 @@
+name: 検査
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    # 毎週月曜 6:00 (日本時間) に、すべてのソースを実サイトで試す。
+    - cron: '0 21 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: 書式と決まり
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          cache-bin: true
+
+      - name: gnn を入れる
+        run: cargo install --locked --git https://github.com/owayo/game-news-nexus gnn-cli
+
+      - name: 検査する
+        run: gnn check .
+
+      - name: 消した・名前を変えたソースを知らせる
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          git diff --name-status --diff-filter=DR "origin/${BASE_REF}...HEAD" -- sources \
+            | while read -r status path _; do
+                echo "::warning file=${path}::ソースを消すか ID を変えると、利用者の記事と on/off が引き継がれません (${status})"
+              done
+
+      - name: 変えたソースを実サイトで試す
+        if: github.event_name == 'pull_request'
+        # 配信元によっては海外 (この実行環境) からの接続を断るため、失敗しても止めない。
+        continue-on-error: true
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          ids=$(git diff --name-only --diff-filter=AM "origin/${BASE_REF}...HEAD" -- 'sources/**/*.yaml' \
+            | xargs -r -n1 basename | sed 's/\.yaml$//' | tr '\n' ' ')
+          if [ -z "${ids}" ]; then
+            echo "変えたソースはありません"
+            exit 0
+          fi
+          # shellcheck disable=SC2086
+          gnn try . ${ids} | tee try.txt
+          {
+            echo '### gnn try'
+            echo '```'
+            cat try.txt
+            echo '```'
+          } >> "${GITHUB_STEP_SUMMARY}"
+
+  health:
+    name: 実サイトの健康診断
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          cache-bin: true
+
+      - name: gnn を入れる
+        run: cargo install --locked --git https://github.com/owayo/game-news-nexus gnn-cli
+
+      - name: すべてのソースを試す
+        # 海外からの接続を断る配信元もあるので、結果は要約に残すだけにする。
+        continue-on-error: true
+        run: |
+          gnn try . --limit 1 | tee try.txt
+          {
+            echo '### すべてのソースの取得結果'
+            echo '```'
+            cat try.txt
+            echo '```'
+          } >> "${GITHUB_STEP_SUMMARY}"

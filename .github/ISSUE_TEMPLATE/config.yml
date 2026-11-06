@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: アプリ本体の不具合・要望
+    url: https://github.com/owayo/game-news-nexus/issues
+    about: 画面や常駐、通知などアプリ本体のことはこちらへ

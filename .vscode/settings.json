@@ -1,0 +1,8 @@
+{
+  "yaml.schemas": {
+    "./schema/source.schema.json": "sources/**/*.yaml"
+  },
+  "yaml.yamlVersion": "1.2",
+  "files.eol": "\n",
+  "files.insertFinalNewline": true
+}
