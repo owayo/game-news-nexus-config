@@ -4,7 +4,7 @@
 groups:
   - id: dmm
     name: DMM GAMES
-    description: 'DMM GAMES / FANZA GAMES のタイトルのお知らせと、新作・近日リリース'
+    description: 'DMM GAMES / FANZA GAMES のタイトルのお知らせ'
     default: true
   - id: hoyoverse
     name: HoYoverse

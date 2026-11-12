@@ -26,7 +26,7 @@
       "type": "string"
     },
     "channel": {
-      "description": "お知らせか、新作・近日リリースの一覧か。",
+      "description": "お知らせの出し先。",
       "$ref": "#/$defs/Channel"
     },
     "homepage": {
@@ -143,11 +143,6 @@
           "description": "お知らせ。取得した記事を蓄積する。",
           "type": "string",
           "const": "news"
-        },
-        {
-          "description": "新作・近日リリース。取得のたびに一覧を置き換える。",
-          "type": "string",
-          "const": "releases"
         }
       ]
     },

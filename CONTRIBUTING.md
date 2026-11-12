@@ -42,7 +42,7 @@ name: サンプルゲーム          # 画面に出す名前 (必須)
 homepage: 'https://example.com/news/'   # 公式のお知らせのページ
 tags: [example]
 note: '利用者向けの説明'
-channel: news                 # news (お知らせ、既定) か releases (新作・近日リリース)
+channel: news                 # お知らせ (既定。省略可)
 timezone: Asia/Tokyo          # 時差のない日時をどの地域の時刻として読むか (既定 Asia/Tokyo)
 schedule:                     # 本文の予定 (メンテナンスなど) の日時を読む地域時刻 (任意。後述)
   timezone: Asia/Tokyo
