@@ -48,6 +48,8 @@ schedule:                     # 本文の予定 (メンテナンスなど) の�
   timezone: Asia/Tokyo
 interval_minutes: 60          # 取得間隔の目安 (分)。省略時はアプリの設定
 max_items: 50                 # 1 回の取得で読む記事の上限 (既定 100)
+adult: true                   # 成人向け (FANZA GAMES の版など)。任意。後述
+general_edition: example_game # 同じゲームの一般向けの版の ID (成人向けの版だけ。任意。後述)
 
 prepare: []                   # 1. 事前の取得 (任意)
 lists: []                     # 2. 一覧 (必須。1 つ以上)
@@ -312,6 +314,40 @@ url_identity:
 - `url_identity` を使うソースは `min_app_version` を `'26.11.6'` 以上にします。
 - 書き足しても、保存済みの記事は「更新」になりません。アプリは次の取得のときに、保存済みの画像を同じ決まりで直して比べます。
 
+## 一般版と FANZA 版 (`adult`・`general_edition`・`inherit_articles`)
+
+DMM GAMES のゲームには、一般向けの版 (DMM GAMES) と成人向けの版 (FANZA GAMES) があり、お知らせの取得先が違うものがあります。
+版ごとに別のソース (別のファイル・別の ID) にします。
+
+```yaml
+# サンプルゲーム (FANZA 版)
+schema: 2
+min_app_version: '26.11.6'
+id: example_game_r18          # 一般向けの版の ID に _r18 を付ける
+name: サンプルゲーム
+adult: true                   # 成人向け。利用者が設定で 18 歳以上と同意したときだけ使う
+general_edition: example_game # 同じゲームの一般向けの版の ID
+lists:
+  - kind: json
+    request:
+      url: 'https://api-r18.example.com/news'   # 成人向けの版の取得先
+```
+
+- 成人向けの取得先 (FANZA GAMES の版・R18 の API・`.pink` のドメインなど) を使うソースには、必ず `adult: true` を書きます。
+  一般向けの版のソースに、成人向けの版の取得先を書かないでください。
+- 一般向けの版は、今の ID のまま一般向けの取得先にします。成人向けの版の ID は、一般向けの版の ID に `_r18` を付けます。
+- `general_edition` は、同じグループ・同じ `channel` の、成人向けでないソースを指します。1 つの一般向けの版を指す成人向けの版は
+  1 つだけにします。合わない・重なると、アプリはその成人向けの版を使いません (`gnn check` が知らせます)。
+- FANZA GAMES だけのゲームは `adult: true` だけを書きます。
+- アプリは、同意した利用者には一般向けの版の代わりに成人向けの版を取得します (on/off とアイコンは一般向けの版の設定を使います)。
+  FANZA GAMES だけのゲームは、同意した利用者のソース画面に off で出ます。同意していない利用者には、成人向けのソースの名前も出しません。
+- `inherit_articles: true` (成人向けの版に書く) は、これまで一般向けの版の ID で成人向けの版の取得先を取得していたゲームを、
+  版ごとに分けるときだけ書きます。アプリは組を初めて見たときに 1 度だけ、一般向けの版の ID の記事を既読・予定ごと成人向けの版へ
+  移します。新しく版を足すときは書きません (一般向けの版で取得した記事まで移ってしまうため)。
+- これらを使うソースは `min_app_version` を `'26.11.6'` 以上にします。
+- `gnn try` は、`--adult-consent` を付けたときだけ成人向けのソースを試します (18 歳以上で、成人向けの内容を取得することに同意する
+  場合だけ付けます)。GitHub Actions の中では、成人向けのソースの記事の題名と本文を出しません。
+
 ## 差し込み (テンプレート)
 
 | 書き方 | 中身 | 使える場所 |
@@ -351,6 +387,7 @@ cargo install --locked --git https://github.com/owayo/game-news-nexus gnn-cli
 gnn check .                     # 書式と決まりを検査する
 gnn try . example_game          # 実際のサイトから取得してみる (ID を省くとすべて)
 gnn try . example_game --limit 5
+gnn try . example_game_r18 --adult-consent   # 成人向けのソース (18 歳以上で同意する場合だけ)
 ```
 
 `gnn try` は、どの段で何件取れたかと、記事の先頭を表示します。
@@ -364,6 +401,7 @@ gnn try . example_game --limit 5
 - [ ] `gnn try . <ID>` で記事のタイトル・日時・本文が取れた
 - [ ] ファイル名と `id` が同じで、既存のソースの `id` を変えていない
 - [ ] `min_app_version` を書いた
+- [ ] 成人向けの取得先には `adult: true` を書き、一般向けの版があれば `general_edition` で組にした
 - [ ] 秘密の値・手元のネットワーク・ログインが必要なページを使っていない
 
 CI でも `gnn check` と、変えたソースの `gnn try` が動きます。配信元によっては海外 (CI の実行環境) からの接続を断るため、`gnn try` の失敗だけでは PR を止めません。その場合は手元の `gnn try` の結果を PR に貼ってください。

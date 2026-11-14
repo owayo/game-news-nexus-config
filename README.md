@@ -10,6 +10,8 @@
 - 利用者はソース画面でゲームごとに on/off します。初めて起動したときは `groups.yaml` で `default: true` のグループが on になります。
   あとからそのグループに足したゲームも、利用者のアプリが初めて取り込んだときに on になります (off にしたものは off のまま)。
 - 取り込みはファイルごとに判断します。書式が誤っているファイルや、そのアプリより新しい版を求めるファイル (`min_app_version`) は、同じソースの前の版を使い続けます。
+- 成人向けのソース (`adult: true`。FANZA GAMES の版など) は、利用者がアプリの設定で 18 歳以上であることを確かめて同意したときだけ使います。
+  一般向けの版 (DMM GAMES) のあるゲームは、版ごとに別のソースにして `general_edition` で組にします ([CONTRIBUTING.md](CONTRIBUTING.md#一般版と-fanza-版-adultgeneral_editioninherit_articles))。
 
 ## 構成
 

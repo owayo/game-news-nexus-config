@@ -60,8 +60,9 @@ jobs:
             echo "変えたソースはありません"
             exit 0
           fi
+          # 成人向けのソースも試す (GitHub Actions の中では、成人向けの記事の題名と本文を出さない)。
           # shellcheck disable=SC2086
-          gnn try . ${ids} | tee try.txt
+          gnn try . ${ids} --adult-consent | tee try.txt
           {
             echo '### gnn try'
             echo '```'
@@ -89,7 +90,8 @@ jobs:
         # 海外からの接続を断る配信元もあるので、結果は要約に残すだけにする。
         continue-on-error: true
         run: |
-          gnn try . --limit 1 | tee try.txt
+          # 成人向けのソースも試す (GitHub Actions の中では、成人向けの記事の題名と本文を出さない)。
+          gnn try . --limit 1 --adult-consent | tee try.txt
           {
             echo '### すべてのソースの取得結果'
             echo '```'
