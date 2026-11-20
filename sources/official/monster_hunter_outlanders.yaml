@@ -1,0 +1,45 @@
+# yaml-language-server: $schema=../../schema/source.schema.json
+schema: 2
+min_app_version: '26.11.6'
+id: monster_hunter_outlanders
+name: 'モンスターハンターアウトランダーズ'
+homepage: 'https://monsterhunteroutlanders.com/ja/news.html'
+icon: 'https://monsterhunteroutlanders.com/assets/logo-SZcLPzMF.png'
+lists:
+  - kind: json
+    request:
+      url: 'https://sg-community.playerinfinite.com/api/gpts.information_feeds_svr.InformationFeedsSvr/GetContentByLabel'
+      method: POST
+      headers:
+        Content-Type: application/json
+        X-GameId: '30075'
+        X-AreaId: global
+        X-Source: pc_web
+        X-Language: ja
+        Origin: 'https://monsterhunteroutlanders.com'
+        Referer: 'https://monsterhunteroutlanders.com/ja/'
+      # 公式サイトの「最新情報」欄 (Latest)。
+      body: '{"language":["ja"],"gameid":"30075","offset":0,"get_num":20,"ext_info_type_list":[0,1,2],"secondary_label_id":0,"primary_label_id":1065,"content_class":0}'
+    items: '/data/info_content'
+    fields:
+      id: '/content_id'
+      title: '/title'
+      url: 'https://monsterhunteroutlanders.com/ja/detail.html?content_id={{/content_id}}&father_content_id={{/father_content_id}}'
+      published: '/pub_timestamp'
+      image: '/pic_urls/0'
+detail:
+  kind: json
+  request:
+    url: 'https://sg-community.playerinfinite.com/api/gpts.information_feeds_svr.InformationFeedsSvr/GetContentInfoById'
+    method: POST
+    headers:
+      Content-Type: application/json
+      X-GameId: '30075'
+      X-AreaId: global
+      X-Source: pc_web
+      X-Language: ja
+      Origin: 'https://monsterhunteroutlanders.com'
+      Referer: 'https://monsterhunteroutlanders.com/ja/'
+    body: '{"content_id":"{{item.id}}","gameid":"30075","language":"ja"}'
+  fields:
+    body: '/data/content'

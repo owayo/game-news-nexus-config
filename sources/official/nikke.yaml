@@ -1,0 +1,45 @@
+# yaml-language-server: $schema=../../schema/source.schema.json
+schema: 2
+min_app_version: '26.11.6'
+id: nikke
+name: '勝利の女神：NIKKE'
+homepage: 'https://nikke-jp.com/news.html'
+icon: 'https://nikke-jp.com/favicon.ico'
+lists:
+  # 公式のお知らせ欄。メンテナンス・アップデート・ゲーム内イベントを掲載する。
+  - kind: json
+    request:
+      url: 'https://na-community.playerinfinite.com/api/gpts.information_feeds_svr.InformationFeedsSvr/GetContentByLabel'
+      method: POST
+      headers:
+        Content-Type: application/json
+        X-GameId: '16'
+        X-AreaId: na
+        X-Source: pc_web
+        X-Language: ja
+        Origin: 'https://nikke-jp.com'
+        Referer: 'https://nikke-jp.com/'
+      body: '{"language":["ja"],"gameid":"16","offset":0,"get_num":20,"ext_info_type_list":[0,1,2],"secondary_label_id":892,"primary_label_id":309,"content_class":0}'
+    items: '/data/info_content'
+    fields:
+      id: '/content_id'
+      title: '/title'
+      url: 'https://nikke-jp.com/newsdetail.html?content_id={{/content_id}}'
+      published: '/pub_timestamp'
+      image: '/pic_urls/0'
+detail:
+  kind: json
+  request:
+    url: 'https://na-community.playerinfinite.com/api/gpts.information_feeds_svr.InformationFeedsSvr/GetContentInfoById'
+    method: POST
+    headers:
+      Content-Type: application/json
+      X-GameId: '16'
+      X-AreaId: na
+      X-Source: pc_web
+      X-Language: ja
+      Origin: 'https://nikke-jp.com'
+      Referer: 'https://nikke-jp.com/'
+    body: '{"content_id":"{{item.id}}","gameid":"16","language":"ja"}'
+  fields:
+    body: '/data/content'

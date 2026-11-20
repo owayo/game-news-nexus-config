@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=../../schema/source.schema.json
+schema: 2
+min_app_version: '26.11.6'
+id: monster_strike
+name: 'モンスターストライク'
+homepage: 'https://www.monster-strike.com/news/'
+icon: 'https://www.monster-strike.com/apple-touch-icon.png?250826'
+lists:
+  - kind: html
+    request:
+      url: 'https://www.monster-strike.com/news/'
+    items: 'main a:has(.news-item__title)'
+    fields:
+      title: '.news-item__title'
+      published: { selector: 'time', attr: datetime }
+      image: { selector: '.news-item__thumbnail img', attr: src }
+detail:
+  kind: html
+  fields:
+    body: { selector: '.news-detail__body' }

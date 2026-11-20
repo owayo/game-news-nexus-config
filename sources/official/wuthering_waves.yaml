@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=../../schema/source.schema.json
+schema: 2
+min_app_version: '26.11.6'
+id: wuthering_waves
+name: '鳴潮'
+homepage: 'https://wutheringwaves.kurogames.com/jp/main/news/'
+icon: 'https://wutheringwaves.kurogames.com/static4.0/favicon.ico'
+timezone: Asia/Shanghai
+lists:
+  - kind: json
+    request:
+      url: 'https://hw-media-cdn-mingchao.kurogame.com/akiwebsite/website2.0/json/G152/jp/ArticleMenu.json'
+    items: ''
+    filter:
+      - { pointer: '/top', ne: 1 }
+    fields:
+      id: '/articleId'
+      title: '/articleTitle'
+      url: 'https://wutheringwaves.kurogames.com/jp/main/news/detail/{{/articleId}}'
+      published: '/startTime'
+      image: '/suggestCover'
+detail:
+  kind: json
+  request:
+    url: 'https://hw-media-cdn-mingchao.kurogame.com/akiwebsite/website2.0/json/G152/jp/article/{{item.id}}.json'
+  fields:
+    body: '/articleContent'

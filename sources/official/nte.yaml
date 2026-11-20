@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=../../schema/source.schema.json
+schema: 2
+min_app_version: '26.11.6'
+id: nte
+name: 'NTE: Neverness to Everness'
+homepage: 'https://nte.perfectworld.com/jp/article/news/index.html'
+icon: 'https://nte.perfectworld.com/public/images/icon.png'
+lists:
+  - kind: html
+    request:
+      url: 'https://nte.perfectworld.com/jp/article/news/index.html'
+    items: '.listNews > a[href$=".html"]'
+    fields:
+      title: '.title'
+      published: '.date'
+      note: '.type'
+    pages: { kind: next_link, selector: '.listPage li.active + li > a[href$=".html"]', max_pages: 4 }
+detail:
+  kind: html
+  fields:
+    body: { selector: '.articleContent' }

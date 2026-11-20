@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=../../schema/source.schema.json
+schema: 2
+min_app_version: '26.11.6'
+id: ffxiv
+name: 'FINAL FANTASY XIV'
+homepage: 'https://jp.finalfantasyxiv.com/lodestone/news/'
+icon: 'https://lds-img.finalfantasyxiv.com/h/0/U2uGfVX4GdZgU1jASO0m9h_xLg.png'
+lists:
+  - kind: feed
+    name: ニュース
+    request:
+      url: 'https://jp.finalfantasyxiv.com/lodestone/news/news.xml'
+    content: content
+  - kind: feed
+    name: トピックス
+    request:
+      url: 'https://jp.finalfantasyxiv.com/lodestone/news/topics.xml'
+    content: content

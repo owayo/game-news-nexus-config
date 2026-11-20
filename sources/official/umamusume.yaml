@@ -1,0 +1,33 @@
+# yaml-language-server: $schema=../../schema/source.schema.json
+schema: 2
+min_app_version: '26.11.6'
+id: umamusume
+name: 'ウマ娘 プリティーダービー'
+homepage: 'https://umamusume.jp/news?t=game'
+icon: 'https://umamusume.jp/apple-touch-icon.png'
+lists:
+  - kind: json
+    request:
+      url: 'https://umamusume.jp/api/ajax/pr_info_index'
+      query:
+        format: json
+        announce_label: '1'
+        per_page: '30'
+        page: '1'
+    items: '/information_list'
+    fields:
+      id: '/announce_id'
+      title: '/title'
+      url: 'https://umamusume.jp/news/detail?id={{/announce_id}}'
+      published: '/post_at'
+      image: '/image'
+detail:
+  kind: json
+  request:
+    url: 'https://umamusume.jp/api/ajax/pr_info_detail'
+    query:
+      format: json
+      announce_id: '{{item.id}}'
+  fields:
+    body: '/detail/message'
+    image: '/detail/image_big'

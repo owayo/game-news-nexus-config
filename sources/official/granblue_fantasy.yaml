@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=../../schema/source.schema.json
+schema: 2
+min_app_version: '26.11.6'
+id: granblue_fantasy
+name: 'グランブルーファンタジー'
+homepage: 'https://granbluefantasy.com/ja/news/'
+icon: 'https://granbluefantasy.com/android-touch-icon.png'
+lists:
+  - kind: json
+    request:
+      url: 'https://granbluefantasy.com/rcms-api/1/news'
+      query:
+        _lang: ja
+        cnt: '30'
+        pageID: '1'
+    items: '/list'
+    fields:
+      id: '/topics_id'
+      title: '/subject'
+      url: 'https://granbluefantasy.com/ja/news/{{/topics_id}}'
+      published: '{{/ymd}} {{/post_time}}'
+      body: '/content'
+      image: '/thumb'

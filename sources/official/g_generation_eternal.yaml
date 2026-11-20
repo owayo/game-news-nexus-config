@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=../../schema/source.schema.json
+schema: 2
+min_app_version: '26.11.6'
+id: g_generation_eternal
+name: 'SDガンダム ジージェネレーション エターナル'
+homepage: 'https://gget.ggame.jp/jp/'
+icon: 'https://gget.ggame.jp/jp/webclip.png'
+note: 'バンダイナムコの公式ポータル GUNDAM PERFECT GAMES のお知らせ'
+lists:
+  # バンダイナムコの公式ポータルでタイトル名を検索する。
+  - kind: html
+    request:
+      url: 'https://ggame.jp/news/index.php'
+      query:
+        category: '4'
+        searchExec: '1'
+        searchWord: 'ジージェネレーション エターナル'
+    items: '.newsBlock01 .list a[href^="/news/detail.php?id="]'
+    fields:
+      title: '.text02'
+      published: '.text03'
+      image: { selector: '.img img, img', attr: src }
+detail:
+  kind: html
+  fields:
+    title: '.newDetail .title02'
+    body: { selector: '.newDetail .txtSet' }

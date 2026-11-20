@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=../../schema/source.schema.json
+schema: 2
+min_app_version: '26.11.6'
+id: dragon_quest_walk
+name: 'ドラゴンクエストウォーク'
+homepage: 'https://walk.dragonquest.jp/web/news/'
+icon: 'https://walk.dragonquest.jp/favicon.ico'
+note: '公式のお知らせには公開日が書かれていない記事があります'
+lists:
+  - kind: html
+    request:
+      url: 'https://walk.dragonquest.jp/web/news/'
+    items: 'li[data-href^="/web/news/show/"]'
+    fields:
+      url: { attr: data-href }
+      image: { selector: '.banner-image', attr: data-origin-image }
+detail:
+  kind: html
+  fields:
+    title: '.news-article .title, .news-article h1'
+    body: { selector: '.news-article' }

@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=../../schema/source.schema.json
+schema: 2
+min_app_version: '26.11.6'
+id: blue_archive
+name: 'ブルーアーカイブ'
+homepage: 'https://bluearchive.jp/news/'
+icon: 'https://webusstatic.yo-star.com/bluearchive_jp_web/favicon.ico'
+lists:
+  - kind: json
+    request:
+      url: 'https://api-web.bluearchive.jp/api/news/list'
+      query: { typeId: '0', pageNum: '20', pageIndex: '1' }
+    items: '/data/rows'
+    fields:
+      id: '/id'
+      title: '/summary'
+      url: 'https://bluearchive.jp/news/newsJump/{{/id}}'
+      published: '/publishTime'
+      body: '/content'
+      note: '/title'

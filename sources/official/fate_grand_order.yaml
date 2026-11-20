@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=../../schema/source.schema.json
+schema: 2
+min_app_version: '26.11.6'
+id: fate_grand_order
+name: 'Fate/Grand Order'
+homepage: 'https://news.fate-go.jp/'
+icon: 'https://www.fate-go.jp/images/apple-touch-icon-152x152.png'
+lists:
+  - kind: html
+    request:
+      url: 'https://news.fate-go.jp/'
+    items: '.list_news > li'
+    require: 'a[href]'
+    fields:
+      title: '.title'
+      published: '.date'
+detail:
+  kind: html
+  fields:
+    body: { selector: 'main .article', remove: ['.title-box'] }

@@ -1,0 +1,23 @@
+name: 取得できないソース
+description: お知らせが取れない、内容がおかしいソースを知らせてください
+labels: [bug]
+body:
+  - type: input
+    id: source
+    attributes:
+      label: ソースの ID か名前
+      placeholder: mist_train_girls
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: 起きていること
+      description: ソース画面に出ているエラーや、取れた記事のおかしな点
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: アプリの版
+      description: 設定画面の下に出ています

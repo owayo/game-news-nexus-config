@@ -1,0 +1,14 @@
+# AUTOMATON
+# yaml-language-server: $schema=../../schema/source.schema.json
+schema: 2
+min_app_version: '26.11.6'
+id: automaton
+name: AUTOMATON
+homepage: 'https://automaton-media.com/'
+icon: 'https://automaton-media.com/wp-content/uploads/2024/11/cropped-automaton-favicon-192x192.png'
+tags:
+  - media
+lists:
+  - kind: feed
+    request:
+      url: 'https://automaton-media.com/feed/'

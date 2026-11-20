@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=../../schema/source.schema.json
+schema: 2
+min_app_version: '26.11.6'
+id: pokemon_go
+name: 'Pokémon GO'
+homepage: 'https://pokemongo.com/ja/news'
+icon: 'https://pokemongo.com/favicon.ico'
+lists:
+  - kind: html
+    request:
+      url: 'https://pokemongo.com/ja/news'
+    items: 'a[href^="/ja/news/"]'
+    require: 'pg-date-format[timestamp]'
+    fields:
+      title: 'div[class*="newsCardTitle"]'
+      published: { selector: 'pg-date-format', attr: timestamp }
+      image: { selector: 'img', attr: src }
+detail:
+  kind: html
+  fields:
+    body: { selector: 'article' }
